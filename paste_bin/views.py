@@ -18,38 +18,8 @@ def index(request):
 
 def save(request):
     match = re.match(r'(?P<day>\d{1,2})/(?P<month>\d{1,2})/(?P<year>\d{4})', request.POST["date"])
-    if match == None:
-        return render_to_response("paste_bin/index.html",
-                                  {'name':request.POST["name"],
-                                   'title':request.POST["title"],
-                                   'text':request.POST["text"],
-                                   'err_input':True,
-                                   'err_date':True
-                                  },
-                                  context_instance = RequestContext(request))
     groups = match.groupdict()
-
-    try:
-        edate = datetime.date(int(groups['year']), int(groups['month']), int(groups['day']))
-    except ValueError:
-        return render_to_response("paste_bin/index.html",
-                                  {'name':request.POST["name"],
-                                   'title':request.POST["title"],
-                                   'text':request.POST["text"],
-                                   'err_input':True,
-                                   'err_date':True
-                                  },
-                                  context_instance = RequestContext(request))
-
-    if edate < datetime.date.today():
-        return render_to_response("paste_bin/index.html",
-                                  {'name':request.POST["name"],
-                                   'title':request.POST["title"],
-                                   'text':request.POST["text"],
-                                   'err_input':True,
-                                   'err_date':True
-                                  },
-                                  context_instance = RequestContext(request))
+    edate = datetime.date(int(groups['year']), int(groups['month']), int(groups['day']))
 
     rec = None
     try:
@@ -65,6 +35,20 @@ def save(request):
         return HttpResponse("<b>Cannot search new URL</b>")
 
     return HttpResponseRedirect(reverse('paste_bin.views.viewrec', args = (rec.url,)))
+
+def search(request):
+    query = request.GET.get('q', '')
+    namerecs = record.objects.filter(name = query)
+    titlerecs = record.objects.filter(title = query)
+    has_namerecs = True if len(namerecs) != 0 else False
+    has_titlerecs = True if len(titlerecs) != 0 else False
+    return render_to_response('paste_bin/search.html',
+                              {'namerecs':namerecs,
+                               'titlerecs':titlerecs,
+                               'found_name':has_namerecs,
+                               'found_title':has_titlerecs
+                              }
+                             )
 
 def viewrec(request, urlstr):
     record.rem_old_records()                        #removing old records

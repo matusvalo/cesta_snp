@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     # Example:
      (r'^pastebin/$', 'paste_bin.views.index'),
      (r'^pastebin/save/$', 'paste_bin.views.save'),
+     (r'^pastebin/search/$', 'paste_bin.views.search'),
      (r'^pastebin/record/(?P<urlstr>.{{{0}}})$'.format(URL_LEN), 'paste_bin.views.viewrec'),
      (r'^pastebin/media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),
     # Uncomment the admin/doc line below to enable admin documentation:
