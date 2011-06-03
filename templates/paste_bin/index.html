@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="media/extjs/resources/css/ext-all.css">
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title>Paste bin</title>
+
+<style type="text/css">
+#hi
+{
+color:red;
+} 
+</style>
+
+</head>
+
+<body>
+
+<form action="/pastebin/save/" method="post">
+{% csrf_token %}
+{% if err_input and err_date %}
+<b id="hi">Inserted wrong date</b><br/>
+{% endif %}
+<label>Enter a date: </label><input type="text" id="dateField" name="date"><button type="button" id="openCalendar">Open Calendar</button><div id="calendar"></div>
+
+name <input type="text" name="name" {% if err_input %} value="{{name}}" {% endif %}/><br/>
+title <input type="text" name="title" {% if err_input %} value="{{title}}" {% endif %}/><br/>
+text<br/> <textarea name="text"rows="10" cols="30">{% if err_input %} {{text}} {% endif %}</textarea><br/>
+<button type="submit"/>send</button>
+</form>
+
+<script type="text/javascript" src="media/extjs/adapter/ext/ext-base.js"></script>
+
+<script type="text/javascript" src="media/extjs/ext-all.js"></script>
+
+<script type="text/javascript">
+
+ 
+
+//set local blank image
+Ext.BLANK_IMAGE_URL = 'media/resources/images/default/s.gif';
+
+//define function to be executed when page loaded
+Ext.onReady(function() {
+
+	//define select handler
+	var selectHandler = function(myDP, date) {
+		//get the text field
+		var field = document.getElementById('dateField');
+
+		//add the selected date to the field
+		field.value = date.format('d/m/Y');
+
+		//hide the date picker
+		myDP.hide();
+	};
+
+	//create the date picker
+	var myDP = new Ext.DatePicker(
+		{
+			startDay: 1,
+			listeners: {'select':selectHandler}
+		}
+
+	);
+
+	//render the date picker
+	myDP.render('calendar');
+
+	//hide date picker straight away
+	myDP.hide();
+
+	//define click handler
+	var clickHandler = function() {
+		//show the date picker
+		myDP.show();
+	};
+
+	//add listener for button click
+
+	Ext.EventManager.on('openCalendar', 'click', clickHandler);
+
+});
+
+</script>
+
+</html>
