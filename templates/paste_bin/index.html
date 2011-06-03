@@ -11,10 +11,21 @@
 <title>Paste bin</title>
 
 <style type="text/css">
-#hi
+#text
 {
-color:red;
-} 
+position:absolute;
+left:110px;
+}
+#title
+{
+position:absolute;
+left:110px;
+}
+#name
+{
+position:absolute;
+left:110px;
+}
 </style>
 
 </head>
@@ -24,6 +35,7 @@ color:red;
 <form action="/pastebin/search/" method="get">
     <label>search</label> <input type="text" name="q"/><button type="submit">search</button><br/>
 </form>
+<br/>
 
 <script type="text/javascript">
 function send_data() {
@@ -61,12 +73,9 @@ function send_data() {
 
 <form id="sendForm" action="/pastebin/save/" method="post">
 {% csrf_token %}
-{% if err_input and err_date %}
-<b id="hi">Inserted wrong date</b><br/>
-{% endif %}
 <label>Enter a date: </label><input type="text" id="dateField" name="date"><button type="button" id="openCalendar">Open Calendar</button><div id="calendar"></div>
-<label>name</label> <input type="text" name="name" {% if err_input %} value="{{name}}" {% endif %}/><br/>
-<label>title</label> <input type="text" name="title" {% if err_input %} value="{{title}}" {% endif %}/><br/>
+<label>name</label> <input id="name" type="text" name="name" {% if err_input %} value="{{name}}" {% endif %}/><br/>
+<label>title</label> <input id = "title"type="text" name="title" {% if err_input %} value="{{title}}" {% endif %}/><br/>
 <label>text</label><br/> <textarea name="text"rows="10" cols="30">{% if err_input %} {{text}} {% endif %}</textarea><br/>
 <button type="button" onclick="send_data()">send</button>
 </form>
