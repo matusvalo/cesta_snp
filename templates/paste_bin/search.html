@@ -1,0 +1,29 @@
+<html>
+    {% if not found_name and not found_title %}
+    <b>No matches found.</b><br/>
+    {% endif %}
+    {% if found_name %}
+    Records with match in name:<br/>
+    <ul>
+        {% for namerec in namerecs %}
+        <li>
+            <a href="http://127.0.0.1:8000/pastebin/record/{{ namerec.url }}">http://127.0.0.1:8000/pastebin/record/{{ namerec.url }}</a><br/>
+            name: {{ namerec.name }}<br/>
+            title: {{ namerec.title }}<br/>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% if found_title %}
+    Records with match in title:<br/>
+    <ul>
+        {% for titlerec in titlerecs %}
+        <li>
+            <a href="http://127.0.0.1:8000/pastebin/record/{{ namerec.url }}">http://127.0.0.1:8000/pastebin/record/{{ namerec.url }}</a><br/>
+            name: {{ titlerec.name }}<br/>
+            title: {{ titlerec.title }}<br/>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</html>
